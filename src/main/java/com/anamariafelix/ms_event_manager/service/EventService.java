@@ -1,6 +1,7 @@
 package com.anamariafelix.ms_event_manager.service;
 
 import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
+import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
 import com.anamariafelix.ms_event_manager.infra.ViaCepClientOpenFeign;
 import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.repository.EventRepository;
@@ -27,5 +28,11 @@ public class EventService {
         }
 
         return eventRepository.save(event);
+    }
+
+    @Transactional(readOnly = true)
+    public Event fidById(String id){
+        return eventRepository.findById(id).orElseThrow(
+                () -> new EventNotFoundException("Event not found!"));
     }
 }
