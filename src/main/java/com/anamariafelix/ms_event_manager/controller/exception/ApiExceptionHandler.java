@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_event_manager.controller.exception;
 
+import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,5 +24,12 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Invalid field(s)", result));
+    }
+    @ExceptionHandler(EventNotFoundException.class)
+    public ResponseEntity<ErrorMessage> EventNotFoundException(EventNotFoundException e,HttpServletRequest request, BindingResult result) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, e.getMessage()));
     }
 }
