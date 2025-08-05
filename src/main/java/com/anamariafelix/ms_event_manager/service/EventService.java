@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class EventService {
@@ -33,6 +35,11 @@ public class EventService {
     @Transactional(readOnly = true)
     public Event fidById(String id){
         return eventRepository.findById(id).orElseThrow(
-                () -> new EventNotFoundException("Event not found!"));
+                () -> new EventNotFoundException(String.format("Event with id = %s not found!", id)));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Event> fidAll() {
+        return eventRepository.findAll();
     }
 }
