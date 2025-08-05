@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: ms-event-manager
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:admin@clusterevent.7ysylg7.mongodb.net/?retryWrites=true&w=majority&appName=ClusterEvent
+      database: db_event
