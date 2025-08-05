@@ -11,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import static com.anamariafelix.ms_event_manager.mapper.EventMapper.toEvent;
-import static com.anamariafelix.ms_event_manager.mapper.EventMapper.toEventDTO;
+import java.util.List;
+
+import static com.anamariafelix.ms_event_manager.mapper.EventMapper.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,6 +33,12 @@ public class EventController {
     public ResponseEntity<EventResponseDTO> findById(@PathVariable String id) {
         Event event = eventService.fidById(id);
         return ResponseEntity.ok().body(toEventDTO(event));
+    }
+
+    @GetMapping("/get-all-events")
+    public ResponseEntity<List<EventResponseDTO>> findAll() {
+        List<Event> events = eventService.fidAll();
+        return ResponseEntity.ok().body(toListEventDTO(events));
     }
 
 }
