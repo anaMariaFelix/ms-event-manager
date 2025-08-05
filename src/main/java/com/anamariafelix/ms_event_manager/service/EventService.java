@@ -42,4 +42,9 @@ public class EventService {
     public List<Event> fidAll() {
         return eventRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public List<Event> fidAllSorted() {
+        return eventRepository.findAllByOrderByEventNameAsc();
+    }
 }
