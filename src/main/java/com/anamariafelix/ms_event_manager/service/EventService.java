@@ -47,4 +47,29 @@ public class EventService {
     public List<Event> fidAllSorted() {
         return eventRepository.findAllByOrderByEventNameAsc();
     }
+
+    @Transactional
+    public Event update(String id, Event eventUpdate) {
+        Event event = fidById(id);
+
+        if(event.getEventName() != eventUpdate.getEventName()){
+            event.setEventName(eventUpdate.getEventName());
+        }
+        if(event.getDateTime() != eventUpdate.getDateTime()){
+            event.setDateTime(eventUpdate.getDateTime());
+        }
+        if(event.getCep() != eventUpdate.getCep()){
+            event.setCep(eventUpdate.getCep());
+
+            ViaCepResponseDTO enderecoViaCep = viaCepClient.findByAddress(event.getCep());
+
+            if (enderecoViaCep != null) {
+                event.setLogradouro(enderecoViaCep.getLogradouro());
+                event.setBairro(enderecoViaCep.getBairro());
+                event.setCidade(enderecoViaCep.getLocalidade());
+                event.setUf(enderecoViaCep.getUf());
+            }
+        }
+        return eventRepository.save(event);
+    }
 }
