@@ -14,7 +14,7 @@ public class UserCreateDTO {
     @Email(message = "Invalid email format!", regexp = "^[a-z0-9.+-]+@[a-z0-9.+-]+\\.[a-z]{2,}$")
     private String email;
 
-    @NotNull(message = "The Date must be informed")
+    @NotBlank(message = "The password must be entered")
     @Size(min = 6, max = 6, message = "The password must contain at least 6 and a maximum of 6 digits")
     private String password;
 

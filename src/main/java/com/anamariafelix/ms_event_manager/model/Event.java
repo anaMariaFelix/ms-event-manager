@@ -20,13 +20,12 @@ public class Event {
 
     @Id
     private String id;
-
     private String eventName;
     private LocalDateTime dateTime;
-    private String cep;
+    private String zipCode;
 
-    private String logradouro;
-    private String bairro;
-    private String cidade;
+    private String street;
+    private String neighborhood;
+    private String city;
     private String uf;
 }

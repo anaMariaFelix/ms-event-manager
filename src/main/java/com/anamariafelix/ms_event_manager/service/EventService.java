@@ -28,15 +28,15 @@ public class EventService {
             throw new EventConflictException(String.format("Event '%s' on date '%s' already registered!",event.getEventName(), event.getDateTime()));
         }
 
-        ViaCepResponseDTO enderecoViaCep = viaCepClient.findByAddress(event.getCep());
+        ViaCepResponseDTO addressViaCep = viaCepClient.findByAddress(event.getZipCode());
 
-        if (Objects.isNull(enderecoViaCep) || Boolean.TRUE.equals(enderecoViaCep.getErro())) {
-            throw new ViaCepNullException(String.format("Invalid zip code %s, please provide a valid zip code!!",event.getCep()));
+        if (Objects.isNull(addressViaCep) || Boolean.TRUE.equals(addressViaCep.getError())) {
+            throw new ViaCepNullException(String.format("Invalid zip code %s, please provide a valid zip code!!",event.getZipCode()));
         }
-        event.setLogradouro(enderecoViaCep.getLogradouro());
-        event.setBairro(enderecoViaCep.getBairro());
-        event.setCidade(enderecoViaCep.getLocalidade());
-        event.setUf(enderecoViaCep.getUf());
+        event.setStreet(addressViaCep.getStreet());
+        event.setNeighborhood(addressViaCep.getNeighborhood());
+        event.setCity(addressViaCep.getCity());
+        event.setUf(addressViaCep.getState());
 
         return eventRepository.save(event);
     }
@@ -67,16 +67,16 @@ public class EventService {
         if(event.getDateTime() != eventUpdate.getDateTime()){
             event.setDateTime(eventUpdate.getDateTime());
         }
-        if(event.getCep() != eventUpdate.getCep()){
-            event.setCep(eventUpdate.getCep());
+        if(event.getZipCode() != eventUpdate.getZipCode()){
+            event.setZipCode(eventUpdate.getCity());
 
-            ViaCepResponseDTO enderecoViaCep = viaCepClient.findByAddress(event.getCep());
+            ViaCepResponseDTO addressViaCep = viaCepClient.findByAddress(event.getZipCode());
 
-            if (enderecoViaCep != null) {
-                event.setLogradouro(enderecoViaCep.getLogradouro());
-                event.setBairro(enderecoViaCep.getBairro());
-                event.setCidade(enderecoViaCep.getLocalidade());
-                event.setUf(enderecoViaCep.getUf());
+            if (addressViaCep != null) {
+                event.setStreet(addressViaCep.getStreet());
+                event.setNeighborhood(addressViaCep.getNeighborhood());
+                event.setCity(addressViaCep.getCity());
+                event.setUf(addressViaCep.getState());
             }
         }
         return eventRepository.save(event);

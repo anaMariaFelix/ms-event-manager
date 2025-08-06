@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_event_manager.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -11,12 +12,19 @@ import lombok.*;
 @ToString
 public class ViaCepResponseDTO {
 
-    private String logradouro;
-    private String bairro;
-    private String localidade;
-    private String uf;
+    @JsonAlias("logradouro")
+    private String street;
 
-    @JsonProperty("erro")
-    private Boolean erro;
+    @JsonAlias("bairro")
+    private String neighborhood;
+
+    @JsonAlias("localidade")
+    private String city;
+
+    @JsonAlias("uf")
+    private String state;
+
+    @JsonAlias("erro")
+    private Boolean error;
 
 }
