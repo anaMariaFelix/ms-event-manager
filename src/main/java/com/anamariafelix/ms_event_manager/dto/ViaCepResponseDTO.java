@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_event_manager.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @AllArgsConstructor
@@ -14,5 +15,8 @@ public class ViaCepResponseDTO {
     private String bairro;
     private String localidade;
     private String uf;
+
+    @JsonProperty("erro")
+    private Boolean erro;
 
 }
