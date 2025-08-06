@@ -5,3 +5,10 @@ spring:
     mongodb:
       uri: mongodb+srv://admin:admin@clusterevent.7ysylg7.mongodb.net/?retryWrites=true&w=majority&appName=ClusterEvent
       database: db_event
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ms-event-manager.html
+  api-docs:
+    path: /docs-ms-event-manager
+  packages-to-scan: com.anamariafelix.ms_event_manager.controller
