@@ -1,15 +1,17 @@
 package com.anamariafelix.ms_event_manager.service;
 
 import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
+import com.anamariafelix.ms_event_manager.exception.EventConflictException;
 import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
+import com.anamariafelix.ms_event_manager.exception.ViaCepNullException;
 import com.anamariafelix.ms_event_manager.infra.ViaCepClientOpenFeign;
 import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -19,15 +21,22 @@ public class EventService {
     private final ViaCepClientOpenFeign viaCepClient;
 
     @Transactional
-    public Event create(Event event) {
+    public Event create(Event event){
+        Event existingEvent = eventRepository.findByEventNameAndDateTime(event.getEventName(), event.getDateTime());
+
+        if (existingEvent != null) {
+            throw new EventConflictException(String.format("Event '%s' on date '%s' already registered!",event.getEventName(), event.getDateTime()));
+        }
+
         ViaCepResponseDTO enderecoViaCep = viaCepClient.findByAddress(event.getCep());
 
-        if (enderecoViaCep != null) {
-            event.setLogradouro(enderecoViaCep.getLogradouro());
-            event.setBairro(enderecoViaCep.getBairro());
-            event.setCidade(enderecoViaCep.getLocalidade());
-            event.setUf(enderecoViaCep.getUf());
+        if (Objects.isNull(enderecoViaCep) || Boolean.TRUE.equals(enderecoViaCep.getErro())) {
+            throw new ViaCepNullException(String.format("Invalid zip code %s, please provide a valid zip code!!",event.getCep()));
         }
+        event.setLogradouro(enderecoViaCep.getLogradouro());
+        event.setBairro(enderecoViaCep.getBairro());
+        event.setCidade(enderecoViaCep.getLocalidade());
+        event.setUf(enderecoViaCep.getUf());
 
         return eventRepository.save(event);
     }
