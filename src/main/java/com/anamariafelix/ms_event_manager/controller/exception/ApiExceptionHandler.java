@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_event_manager.controller.exception;
 
+import com.anamariafelix.ms_event_manager.exception.EmailUniqueViolationException;
 import com.anamariafelix.ms_event_manager.exception.EventConflictException;
 import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
 import com.anamariafelix.ms_event_manager.exception.ViaCepNullException;
@@ -49,6 +50,14 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(EmailUniqueViolationException.class)
+    public ResponseEntity<ErrorMessage> emailUniqueViolationException(EmailUniqueViolationException e,HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
     }
 
 }
