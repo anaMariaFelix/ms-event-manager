@@ -1,6 +1,8 @@
 package com.anamariafelix.ms_event_manager.controller.exception;
 
+import com.anamariafelix.ms_event_manager.exception.EventConflictException;
 import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
+import com.anamariafelix.ms_event_manager.exception.ViaCepNullException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,18 +20,35 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException e,
-                                                                        HttpServletRequest request, BindingResult result) {
+    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException e,HttpServletRequest request, BindingResult result) {
         log.error("Api Error - ", e);
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Invalid field(s)", result));
     }
     @ExceptionHandler(EventNotFoundException.class)
-    public ResponseEntity<ErrorMessage> EventNotFoundException(EventNotFoundException e,HttpServletRequest request, BindingResult result) {
+    public ResponseEntity<ErrorMessage> EventNotFoundException(EventNotFoundException e,HttpServletRequest request) {
         log.error("Api Error - ", e);
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, e.getMessage()));
     }
+
+    @ExceptionHandler(EventConflictException.class)
+    public ResponseEntity<ErrorMessage> eventConflictException(EventConflictException e,HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
+    }
+
+    @ExceptionHandler(ViaCepNullException.class)
+    public ResponseEntity<ErrorMessage> viaCepNullException(ViaCepNullException e,HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+
 }
