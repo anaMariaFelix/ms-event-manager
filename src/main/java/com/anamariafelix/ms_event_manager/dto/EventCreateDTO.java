@@ -2,6 +2,7 @@ package com.anamariafelix.ms_event_manager.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -21,6 +22,6 @@ public class EventCreateDTO {
     private LocalDateTime dateTime;
 
     @NotBlank(message = "The Cep must be informed")
-    @Size(min = 8, max = 8,  message = "The CEP must contain exactly 8 digits")
+    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "The CEP must be in the format 99999-999 or 99999999")
     private String cep;
 }
