@@ -18,7 +18,7 @@ import static com.anamariafelix.ms_event_manager.mapper.UserMapper.toUserDTO;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     private final UserService userService;
