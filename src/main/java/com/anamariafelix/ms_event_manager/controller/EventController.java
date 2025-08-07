@@ -31,7 +31,6 @@ public class EventController {
         return ResponseEntity.status(201).body(toEventDTO(event));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-event/{id}")
     public ResponseEntity<EventResponseDTO> findById(@PathVariable String id) {
         Event event = eventService.fidById(id);

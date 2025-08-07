@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -20,8 +22,25 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    private static final List<Pattern> PUBLIC_PATTERNS = List.of(
+            Pattern.compile("^/api/v1/user/create-user$"),
+            Pattern.compile("^/api/v1/auth$"),
+            Pattern.compile("^/api/v1/events/get-event/[^/]+$")
+    );
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getServletPath();
+
+        for (Pattern pattern : PUBLIC_PATTERNS) {
+            if (pattern.matcher(path).matches()) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
+
         final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
 
         if(token == null || !token.startsWith(JwtUtils.JWT_BEARER)){

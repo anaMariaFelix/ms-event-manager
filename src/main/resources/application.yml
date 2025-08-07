@@ -6,6 +6,9 @@ spring:
       uri: mongodb+srv://admin:admin@clusterevent.7ysylg7.mongodb.net/?retryWrites=true&w=majority&appName=ClusterEvent
       database: db_event
 
+server:
+  port: 8080
+
 springdoc:
   swagger-ui:
     path: /swagger-ms-event-manager.html
