@@ -1,15 +1,12 @@
 package com.anamariafelix.ms_event_manager.controller;
 
 
+import com.anamariafelix.ms_event_manager.controller.docs.AuthenticationControllerDocs;
 import com.anamariafelix.ms_event_manager.controller.exception.ErrorMessage;
 import com.anamariafelix.ms_event_manager.dto.UserLoginDTO;
-import com.anamariafelix.ms_event_manager.dto.UserResponseDTO;
 import com.anamariafelix.ms_event_manager.jwt.JwtToken;
 import com.anamariafelix.ms_event_manager.jwt.JwtUserDetailsService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthenticationController {
+@Tag(name = "Authentication", description = "Endpoint for Managing Authentication")
+public class AuthenticationController implements AuthenticationControllerDocs {
 
     private final JwtUserDetailsService userDetailsService;
 
     private final AuthenticationManager authenticationManager;
 
-    @Operation(summary = "Authenticate to the API", description = "Authentication features in the API",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Authentication successful and return of a Bearer token",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid credentials",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "422", description = "Invalid fields",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
-            })
     @PostMapping
     public ResponseEntity<?> authentication(@RequestBody @Valid UserLoginDTO dto, HttpServletRequest request){
 
