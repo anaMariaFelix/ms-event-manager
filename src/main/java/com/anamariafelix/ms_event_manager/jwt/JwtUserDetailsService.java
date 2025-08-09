@@ -17,15 +17,15 @@ public class JwtUserDetailsService implements UserDetailsService {
     private  final UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        User user = userService.findByEmail(username);
+        User user = userService.findByEmail(email);
         log.info("INFO: User found: {}, password in the database: {}", user.getEmail(), user.getPassword());
         return new JwtUserDetails(user);
     }
 
-    public JwtToken getTokenAuthenticated(String usuername, String role){
-        return JwtUtils.createToken(usuername, role.substring("Role_".length()));
+    public JwtToken getTokenAuthenticated(String email, String role){
+        return JwtUtils.createToken(email, role);
     }
 }
 

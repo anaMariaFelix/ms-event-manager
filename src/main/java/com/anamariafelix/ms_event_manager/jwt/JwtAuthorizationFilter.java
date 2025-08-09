@@ -55,15 +55,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = JwtUtils.getUserNameFromTokem(token);
+        String email = JwtUtils.getUserNameFromTokem(token);
 
-        toAuthentication(request, username);
+        toAuthentication(request, email);
         filterChain.doFilter(request, response);
     }
 
-    private void toAuthentication(HttpServletRequest request, String username) {
+    private void toAuthentication(HttpServletRequest request, String email) {
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken
                 .authenticated(userDetails, null, userDetails.getAuthorities());
