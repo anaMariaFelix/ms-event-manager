@@ -1,9 +1,6 @@
 package com.anamariafelix.ms_event_manager.controller.exception;
 
-import com.anamariafelix.ms_event_manager.exception.EmailUniqueViolationException;
-import com.anamariafelix.ms_event_manager.exception.EventConflictException;
-import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
-import com.anamariafelix.ms_event_manager.exception.ViaCepNullException;
+import com.anamariafelix.ms_event_manager.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,4 +57,11 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
     }
 
+    @ExceptionHandler(EventWithTicketsSoldException.class)
+    public ResponseEntity<ErrorMessage> eventWithTicketsSoldException(EventWithTicketsSoldException e,HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
+    }
 }
