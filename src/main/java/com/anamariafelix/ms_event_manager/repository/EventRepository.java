@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository
 public interface EventRepository extends MongoRepository<Event, String> {
 
-    List<Event> findAllByOrderByEventNameAsc();
+    List<Event> findAllByDeletedFalseOrderByEventNameAsc();
 
-    Event findByEventNameAndDateTime(String eventName, LocalDateTime dateTime);
+    Event findByEventNameAndDateTimeAndDeletedFalse(String eventName, LocalDateTime dateTime);
+
+    Optional<Event> findByIdAndDeletedFalse(String id);
 }

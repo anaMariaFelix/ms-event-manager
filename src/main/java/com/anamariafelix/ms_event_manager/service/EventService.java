@@ -1,15 +1,19 @@
 package com.anamariafelix.ms_event_manager.service;
 
+import com.anamariafelix.ms_event_manager.client.MsTicketClientOpenFeign;
+import com.anamariafelix.ms_event_manager.client.dto.TicketResponseDTO;
 import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
-import com.anamariafelix.ms_event_manager.exception.EventConflictException;
-import com.anamariafelix.ms_event_manager.exception.EventNotFoundException;
-import com.anamariafelix.ms_event_manager.exception.ViaCepNullException;
-import com.anamariafelix.ms_event_manager.infra.ViaCepClientOpenFeign;
+import com.anamariafelix.ms_event_manager.enums.Status;
+import com.anamariafelix.ms_event_manager.exception.*;
+import com.anamariafelix.ms_event_manager.client.ViaCepClientOpenFeign;
 import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.repository.EventRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,20 +23,23 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final ViaCepClientOpenFeign viaCepClient;
+    private final MsTicketClientOpenFeign msTicketClientOpenFeign;
 
     @Transactional
     public Event create(Event event){
-        Event existingEvent = eventRepository.findByEventNameAndDateTime(event.getEventName(), event.getDateTime());
+
+        Event existingEvent = eventRepository.findByEventNameAndDateTimeAndDeletedFalse(event.getEventName(), event.getDateTime());
 
         if (existingEvent != null) {
-            throw new EventConflictException(String.format("Event '%s' on date '%s' already registered!",event.getEventName(), event.getDateTime()));
+            throw new EventConflictException(String.format("Event '%s' on date '%s' already registered!", event.getEventName(), event.getDateTime()));
         }
 
         ViaCepResponseDTO addressViaCep = viaCepClient.findByAddress(event.getZipCode());
 
         if (Objects.isNull(addressViaCep) || Boolean.TRUE.equals(addressViaCep.getError())) {
-            throw new ViaCepNullException(String.format("Invalid zip code %s, please provide a valid zip code!!",event.getZipCode()));
+            throw new ViaCepNullException(String.format("Invalid zip code %s, please provide a valid zip code!!", event.getZipCode()));
         }
+
         event.setStreet(addressViaCep.getStreet());
         event.setNeighborhood(addressViaCep.getNeighborhood());
         event.setCity(addressViaCep.getCity());
@@ -43,7 +50,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public Event fidById(String id){
-        return eventRepository.findById(id).orElseThrow(
+        return eventRepository.findByIdAndDeletedFalse(id).orElseThrow(
                 () -> new EventNotFoundException(String.format("Event with id = %s not found!", id)));
     }
 
@@ -54,31 +61,51 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<Event> fidAllSorted() {
-        return eventRepository.findAllByOrderByEventNameAsc();
+        return eventRepository.findAllByDeletedFalseOrderByEventNameAsc();
     }
 
     @Transactional
     public Event update(String id, Event eventUpdate) {
         Event event = fidById(id);
 
-        if(event.getEventName() != eventUpdate.getEventName()){
+        if(!event.getEventName().equals(eventUpdate.getEventName())){
             event.setEventName(eventUpdate.getEventName());
         }
-        if(event.getDateTime() != eventUpdate.getDateTime()){
+        if(!event.getDateTime().equals(eventUpdate.getDateTime())){
             event.setDateTime(eventUpdate.getDateTime());
         }
-        if(event.getZipCode() != eventUpdate.getZipCode()){
-            event.setZipCode(eventUpdate.getCity());
+        if(!event.getZipCode().equals(eventUpdate.getZipCode())){
 
-            ViaCepResponseDTO addressViaCep = viaCepClient.findByAddress(event.getZipCode());
+            ViaCepResponseDTO addressViaCep = viaCepClient.findByAddress(eventUpdate.getZipCode());
 
-            if (addressViaCep != null) {
-                event.setStreet(addressViaCep.getStreet());
-                event.setNeighborhood(addressViaCep.getNeighborhood());
-                event.setCity(addressViaCep.getCity());
-                event.setUf(addressViaCep.getState());
+            if (Objects.isNull(addressViaCep) || Boolean.TRUE.equals(addressViaCep.getError())) {
+                throw new ViaCepNullException(String.format("Invalid zip code %s, please provide a valid zip code!!",event.getZipCode()));
             }
+
+            event.setZipCode(eventUpdate.getZipCode());
+
+            event.setStreet(addressViaCep.getStreet());
+            event.setNeighborhood(addressViaCep.getNeighborhood());
+            event.setCity(addressViaCep.getCity());
+            event.setUf(addressViaCep.getState());
         }
         return eventRepository.save(event);
+    }
+
+    @Transactional
+    public void deleteById(String id) {
+        Event event = eventRepository.findByIdAndDeletedFalse(id).orElseThrow(
+                () -> new EventNotFoundException(String.format("Event with id = %s not found!", id)));
+
+        List<TicketResponseDTO> tickets = msTicketClientOpenFeign.findAllEventId(event.getId());
+
+        if(!tickets.isEmpty()){
+            throw new EventWithTicketsSoldException("Event With Tickets Sold!");
+        }
+
+        event.setDeleted(true);
+        event.setDeletedAt(LocalDateTime.now());
+        event.setStatus(Status.INACTIVE);
+        eventRepository.save(event);
     }
 }
