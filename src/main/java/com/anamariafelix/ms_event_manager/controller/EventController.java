@@ -1,9 +1,11 @@
 package com.anamariafelix.ms_event_manager.controller;
 
+import com.anamariafelix.ms_event_manager.controller.docs.EventControllerDocs;
 import com.anamariafelix.ms_event_manager.dto.EventCreateDTO;
 import com.anamariafelix.ms_event_manager.dto.EventResponseDTO;
 import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.service.EventService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +21,8 @@ import static com.anamariafelix.ms_event_manager.mapper.EventMapper.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/events")
-public class EventController {
+@Tag(name = "Event", description = "Endpoints for Managing Events")
+public class EventController implements EventControllerDocs {
 
     private final EventService eventService;
 
