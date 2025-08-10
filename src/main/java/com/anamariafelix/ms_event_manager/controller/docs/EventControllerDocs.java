@@ -82,4 +82,23 @@ public interface EventControllerDocs {
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
     ResponseEntity<EventResponseDTO> update(@PathVariable String id, @RequestBody @Valid EventCreateDTO eventCreateDTO);
+
+    @Operation(summary = "Delete Event by Id", description = "Resources for Delete Event by Id." +
+            "Request requires the use of a bearer token.",
+            tags = {"Event"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "404", description = "Event not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "409", description = "Event With Tickets Sold.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "503", description = "Error communicating with Ticket service.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
+    ResponseEntity<Void> deleteById(@PathVariable String id);
 }
