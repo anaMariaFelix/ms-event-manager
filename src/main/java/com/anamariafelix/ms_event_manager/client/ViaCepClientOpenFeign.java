@@ -1,4 +1,4 @@
-package com.anamariafelix.ms_event_manager.infra;
+package com.anamariafelix.ms_event_manager.client;
 
 import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
