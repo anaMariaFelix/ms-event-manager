@@ -5,6 +5,7 @@ import com.anamariafelix.ms_event_manager.dto.EventCreateDTO;
 import com.anamariafelix.ms_event_manager.dto.EventResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,13 +13,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
+
 
 public interface EventControllerDocs {
 
@@ -55,20 +55,24 @@ public interface EventControllerDocs {
     @Operation(summary = "Find all Events", description = "Resources to find all Events.",
             tags = {"Event"},
             security = @SecurityRequirement(name = "security"),
+            parameters = {
+                    @Parameter(in = QUERY, name = "page",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
+                            description = "Represents the returned page"
+                    ),
+                    @Parameter(in = QUERY, name = "size",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "20")),
+                            description = "Represents the total number of elements per page"
+                    ),
+                    @Parameter(in = QUERY, name = "sort", hidden = true,
+                            array = @ArraySchema(schema = @Schema(type = "string", defaultValue = "nome,asc")),
+                            description = "Represents the ordering of the results. Multiple sorting criteria are supported.")
+            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
     ResponseEntity<Page<EventResponseDTO>> findAll(Pageable pageable);
-
-    @Operation(summary = "Find all Events Sorted", description = "Resources to find all Events Sorted.",
-            tags = {"Event"},
-            security = @SecurityRequirement(name = "security"),
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
-                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
-            })
-    ResponseEntity<List<EventResponseDTO>> findAllSorted();
 
     @Operation(summary = "Update a Event", description = "Resources for update a Event.",
             tags = {"Event"},

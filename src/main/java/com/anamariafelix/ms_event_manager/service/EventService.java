@@ -62,11 +62,6 @@ public class EventService {
         return eventRepository.findAllByDeletedFalse(pageable);
     }
 
-    @Transactional(readOnly = true)
-    public List<Event> fidAllSorted() {
-        return eventRepository.findAllByDeletedFalseOrderByEventNameAsc();
-    }
-
     @Transactional
     public Event update(String id, Event eventUpdate) {
         Event event = fidById(id);

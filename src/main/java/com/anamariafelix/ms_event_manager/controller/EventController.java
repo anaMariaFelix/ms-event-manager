@@ -3,7 +3,6 @@ package com.anamariafelix.ms_event_manager.controller;
 import com.anamariafelix.ms_event_manager.controller.docs.EventControllerDocs;
 import com.anamariafelix.ms_event_manager.dto.EventCreateDTO;
 import com.anamariafelix.ms_event_manager.dto.EventResponseDTO;
-import com.anamariafelix.ms_event_manager.mapper.EventMapper;
 import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.service.EventService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -19,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 import static com.anamariafelix.ms_event_manager.mapper.EventMapper.*;
 
@@ -54,13 +51,6 @@ public class EventController implements EventControllerDocs {
         Page<EventResponseDTO> eventResponseDTOPage = events.map(event -> toEventDTO(event));
 
         return ResponseEntity.ok(eventResponseDTOPage);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/get-all-events/sorted")
-    public ResponseEntity<List<EventResponseDTO>> findAllSorted() {
-        List<Event> events = eventService.fidAllSorted();
-        return ResponseEntity.ok().body(toListEventDTO(events));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
