@@ -38,6 +38,10 @@ public interface EventControllerDocs {
                     @ApiResponse(responseCode = "409", description = "Event already exists.",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
 
+                    @ApiResponse(responseCode = "401", description = "Unauthorized the request is not authenticated. Pass the correct authentication credentials.",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
+
             })
     ResponseEntity<EventResponseDTO> create(EventCreateDTO eventCreateDTO);
 
@@ -47,8 +51,13 @@ public interface EventControllerDocs {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+
                     @ApiResponse(responseCode = "404", description = "Event not found.",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Unauthorized the request is not authenticated. Pass the correct authentication credentials.",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
             })
     ResponseEntity<EventResponseDTO> findById(@PathVariable String id);
 
@@ -71,6 +80,10 @@ public interface EventControllerDocs {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Unauthorized the request is not authenticated. Pass the correct authentication credentials.",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
             })
     ResponseEntity<Page<EventResponseDTO>> findAll(Pageable pageable);
 
@@ -89,6 +102,10 @@ public interface EventControllerDocs {
 
                     @ApiResponse(responseCode = "404", description = "Event not found.",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Unauthorized the request is not authenticated. Pass the correct authentication credentials.",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
             })
     ResponseEntity<EventResponseDTO> update(@PathVariable String id, @RequestBody @Valid EventCreateDTO eventCreateDTO);
 
@@ -108,6 +125,10 @@ public interface EventControllerDocs {
 
                     @ApiResponse(responseCode = "503", description = "Error communicating with Ticket service.",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Unauthorized the request is not authenticated. Pass the correct authentication credentials.",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
             })
     ResponseEntity<Void> deleteById(@PathVariable String id);
 }
