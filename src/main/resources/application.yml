@@ -9,6 +9,16 @@ spring:
 server:
   port: 8080
 
+ms:
+  ticket:
+    url: http://localhost:8081/api/v1/ticket
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+
 springdoc:
   swagger-ui:
     path: /swagger-ms-event-manager.html
