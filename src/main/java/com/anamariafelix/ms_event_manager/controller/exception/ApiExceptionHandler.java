@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_event_manager.controller.exception;
 
+import com.anamariafelix.ms_event_manager.ex.OpenFeignConectionException;
 import com.anamariafelix.ms_event_manager.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,13 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
+    }
+
+    @ExceptionHandler(OpenFeignConectionException.class)
+    public ResponseEntity<ErrorMessage> openFeignConectionException(OpenFeignConectionException e,HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)//503
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.SERVICE_UNAVAILABLE, e.getMessage()));
     }
 }

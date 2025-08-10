@@ -4,6 +4,7 @@ import com.anamariafelix.ms_event_manager.client.MsTicketClientOpenFeign;
 import com.anamariafelix.ms_event_manager.client.dto.TicketResponseDTO;
 import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
 import com.anamariafelix.ms_event_manager.enums.Status;
+import com.anamariafelix.ms_event_manager.ex.OpenFeignConectionException;
 import com.anamariafelix.ms_event_manager.exception.*;
 import com.anamariafelix.ms_event_manager.client.ViaCepClientOpenFeign;
 import com.anamariafelix.ms_event_manager.model.Event;
@@ -94,18 +95,22 @@ public class EventService {
 
     @Transactional
     public void deleteById(String id) {
-        Event event = eventRepository.findByIdAndDeletedFalse(id).orElseThrow(
-                () -> new EventNotFoundException(String.format("Event with id = %s not found!", id)));
+        try{
+            Event event = eventRepository.findByIdAndDeletedFalse(id).orElseThrow(
+                    () -> new EventNotFoundException(String.format("Event with id = %s not found!", id)));
 
-        List<TicketResponseDTO> tickets = msTicketClientOpenFeign.findAllEventId(event.getId());
+            List<TicketResponseDTO> tickets = msTicketClientOpenFeign.findAllEventId(event.getId());
 
-        if(!tickets.isEmpty()){
-            throw new EventWithTicketsSoldException("Event With Tickets Sold!");
+            if(!tickets.isEmpty()){
+                throw new EventWithTicketsSoldException("Event With Tickets Sold!");
+            }
+
+            event.setDeleted(true);
+            event.setDeletedAt(LocalDateTime.now());
+            event.setStatus(Status.INACTIVE);
+            eventRepository.save(event);
+        }catch (FeignException e) {
+            throw new OpenFeignConectionException("Error communicating with event service.");
         }
-
-        event.setDeleted(true);
-        event.setDeletedAt(LocalDateTime.now());
-        event.setStatus(Status.INACTIVE);
-        eventRepository.save(event);
     }
 }
