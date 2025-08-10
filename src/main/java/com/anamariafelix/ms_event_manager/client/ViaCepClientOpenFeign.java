@@ -1,6 +1,6 @@
 package com.anamariafelix.ms_event_manager.client;
 
-import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
+import com.anamariafelix.ms_event_manager.client.dto.ViaCepResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

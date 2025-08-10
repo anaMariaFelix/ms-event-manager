@@ -1,7 +1,6 @@
-package com.anamariafelix.ms_event_manager.dto;
+package com.anamariafelix.ms_event_manager.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @AllArgsConstructor

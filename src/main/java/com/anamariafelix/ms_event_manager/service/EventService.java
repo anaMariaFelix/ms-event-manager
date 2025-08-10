@@ -2,7 +2,7 @@ package com.anamariafelix.ms_event_manager.service;
 
 import com.anamariafelix.ms_event_manager.client.MsTicketClientOpenFeign;
 import com.anamariafelix.ms_event_manager.client.dto.TicketResponseDTO;
-import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
+import com.anamariafelix.ms_event_manager.client.dto.ViaCepResponseDTO;
 import com.anamariafelix.ms_event_manager.enums.Status;
 import com.anamariafelix.ms_event_manager.exception.OpenFeignConnectionException;
 import com.anamariafelix.ms_event_manager.exception.*;
