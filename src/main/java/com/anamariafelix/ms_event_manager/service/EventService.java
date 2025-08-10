@@ -4,7 +4,7 @@ import com.anamariafelix.ms_event_manager.client.MsTicketClientOpenFeign;
 import com.anamariafelix.ms_event_manager.client.dto.TicketResponseDTO;
 import com.anamariafelix.ms_event_manager.dto.ViaCepResponseDTO;
 import com.anamariafelix.ms_event_manager.enums.Status;
-import com.anamariafelix.ms_event_manager.exception.OpenFeignConectionException;
+import com.anamariafelix.ms_event_manager.exception.OpenFeignConnectionException;
 import com.anamariafelix.ms_event_manager.exception.*;
 import com.anamariafelix.ms_event_manager.client.ViaCepClientOpenFeign;
 import com.anamariafelix.ms_event_manager.model.Event;
@@ -110,7 +110,7 @@ public class EventService {
             event.setStatus(Status.INACTIVE);
             eventRepository.save(event);
         }catch (FeignException e) {
-            throw new OpenFeignConectionException("Error communicating with event service.");
+            throw new OpenFeignConnectionException("Error communicating with event service.");
         }
     }
 }
