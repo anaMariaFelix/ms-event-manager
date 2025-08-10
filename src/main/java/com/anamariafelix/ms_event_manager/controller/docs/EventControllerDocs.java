@@ -42,7 +42,7 @@ public interface EventControllerDocs {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
-                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                    @ApiResponse(responseCode = "404", description = "Event not found.",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
     ResponseEntity<EventResponseDTO> findById(@PathVariable String id);
@@ -64,4 +64,22 @@ public interface EventControllerDocs {
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
     ResponseEntity<List<EventResponseDTO>> findAllSorted();
+
+    @Operation(summary = "Update a Event", description = "Resources for update a Event.",
+            tags = {"Event"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Resource created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "422", description = "Appeal not processed due to lack of data or invalid data",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "400", description = "Invalid zip code.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "404", description = "Event not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+            })
+    ResponseEntity<EventResponseDTO> update(@PathVariable String id, @RequestBody @Valid EventCreateDTO eventCreateDTO);
 }
