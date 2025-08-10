@@ -3,20 +3,26 @@ package com.anamariafelix.ms_event_manager.controller;
 import com.anamariafelix.ms_event_manager.controller.docs.EventControllerDocs;
 import com.anamariafelix.ms_event_manager.dto.EventCreateDTO;
 import com.anamariafelix.ms_event_manager.dto.EventResponseDTO;
+import com.anamariafelix.ms_event_manager.mapper.EventMapper;
 import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.service.EventService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static com.anamariafelix.ms_event_manager.mapper.EventMapper.*;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -42,9 +48,12 @@ public class EventController implements EventControllerDocs {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-all-events")
-    public ResponseEntity<List<EventResponseDTO>> findAll() {
-        List<Event> events = eventService.fidAll();
-        return ResponseEntity.ok().body(toListEventDTO(events));
+    public ResponseEntity<Page<EventResponseDTO>> findAll(@Parameter(hidden = true) @PageableDefault(size = 5, sort = "eventName", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<Event> events = eventService.fidAll(pageable);
+
+        Page<EventResponseDTO> eventResponseDTOPage = events.map(event -> toEventDTO(event));
+
+        return ResponseEntity.ok(eventResponseDTOPage);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

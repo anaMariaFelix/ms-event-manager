@@ -4,11 +4,16 @@ import com.anamariafelix.ms_event_manager.controller.exception.ErrorMessage;
 import com.anamariafelix.ms_event_manager.dto.EventCreateDTO;
 import com.anamariafelix.ms_event_manager.dto.EventResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +59,7 @@ public interface EventControllerDocs {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
-    ResponseEntity<List<EventResponseDTO>> findAll();
+    ResponseEntity<Page<EventResponseDTO>> findAll(Pageable pageable);
 
     @Operation(summary = "Find all Events Sorted", description = "Resources to find all Events Sorted.",
             tags = {"Event"},

@@ -11,6 +11,8 @@ import com.anamariafelix.ms_event_manager.model.Event;
 import com.anamariafelix.ms_event_manager.repository.EventRepository;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +58,8 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public List<Event> fidAll() {
-        return eventRepository.findAll();
+    public Page<Event> fidAll(Pageable pageable) {
+        return eventRepository.findAllByDeletedFalse(pageable);
     }
 
     @Transactional(readOnly = true)
