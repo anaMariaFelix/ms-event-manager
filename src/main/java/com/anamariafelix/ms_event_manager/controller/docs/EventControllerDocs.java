@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 public interface EventControllerDocs {
 
     @Operation(summary = "Create a new Event", description = "Resources for creating a new Event.",
@@ -32,8 +34,7 @@ public interface EventControllerDocs {
             })
     ResponseEntity<EventResponseDTO> create(EventCreateDTO eventCreateDTO);
 
-    @Operation(summary = "Find a Event by Id", description = "Resources to find a Event by ID." +
-            "Request requires the use of a bearer token. Access restricted to role='ADMIN'",
+    @Operation(summary = "Find a Event by Id", description = "Resources to find a Event by ID.",
             tags = {"Event"},
             security = @SecurityRequirement(name = "security"),
             responses = {
@@ -43,4 +44,13 @@ public interface EventControllerDocs {
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
     ResponseEntity<EventResponseDTO> findById(@PathVariable String id);
+
+    @Operation(summary = "Find all Events", description = "Resources to find all Events.",
+            tags = {"Event"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+            })
+    ResponseEntity<List<EventResponseDTO>> findAll();
 }
