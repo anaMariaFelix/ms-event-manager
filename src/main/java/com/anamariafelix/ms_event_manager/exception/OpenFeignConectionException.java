@@ -1,4 +1,4 @@
-package com.anamariafelix.ms_event_manager.ex;
+package com.anamariafelix.ms_event_manager.exception;
 
 public class OpenFeignConectionException extends RuntimeException {
 

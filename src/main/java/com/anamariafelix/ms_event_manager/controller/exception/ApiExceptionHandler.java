@@ -1,6 +1,6 @@
 package com.anamariafelix.ms_event_manager.controller.exception;
 
-import com.anamariafelix.ms_event_manager.ex.OpenFeignConectionException;
+import com.anamariafelix.ms_event_manager.exception.OpenFeignConectionException;
 import com.anamariafelix.ms_event_manager.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
