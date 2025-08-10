@@ -60,4 +60,11 @@ public class EventController implements EventControllerDocs {
         Event event = eventService.update(id, toEvent(eventCreateDTO));
         return ResponseEntity.ok().body(toEventDTO(event));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete-event/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+        eventService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
