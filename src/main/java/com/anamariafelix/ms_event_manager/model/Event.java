@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_event_manager.model;
 
+import com.anamariafelix.ms_event_manager.enums.Status;
 import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,4 +29,8 @@ public class Event {
     private String neighborhood;
     private String city;
     private String uf;
+
+    private boolean deleted = false;
+    private LocalDateTime deletedAt;
+    private Status status = Status.ACTIVE;
 }
