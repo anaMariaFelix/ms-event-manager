@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -53,4 +55,13 @@ public interface EventControllerDocs {
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
             })
     ResponseEntity<List<EventResponseDTO>> findAll();
+
+    @Operation(summary = "Find all Events Sorted", description = "Resources to find all Events Sorted.",
+            tags = {"Event"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+            })
+    ResponseEntity<List<EventResponseDTO>> findAllSorted();
 }
