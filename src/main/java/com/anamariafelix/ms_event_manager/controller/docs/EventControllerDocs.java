@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface EventControllerDocs {
 
@@ -30,4 +31,16 @@ public interface EventControllerDocs {
 
             })
     ResponseEntity<EventResponseDTO> create(EventCreateDTO eventCreateDTO);
+
+    @Operation(summary = "Find a Event by Id", description = "Resources to find a Event by ID." +
+            "Request requires the use of a bearer token. Access restricted to role='ADMIN'",
+            tags = {"Event"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EventResponseDTO.class))),
+            })
+    ResponseEntity<EventResponseDTO> findById(@PathVariable String id);
 }
