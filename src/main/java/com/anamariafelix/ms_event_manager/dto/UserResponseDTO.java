@@ -4,13 +4,9 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class UserResponseDTO {
 
     private String email;
     private String role;
-
 }

@@ -26,6 +26,7 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public User findByEmail(String username) {
         return userRepository.findByEmail(username);
     }

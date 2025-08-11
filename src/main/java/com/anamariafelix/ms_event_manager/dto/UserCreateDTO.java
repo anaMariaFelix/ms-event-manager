@@ -5,7 +5,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode @ToString
+@Data
 public class UserCreateDTO {
 
     private String id;
@@ -17,5 +17,4 @@ public class UserCreateDTO {
     @NotBlank(message = "The password must be entered")
     @Size(min = 6, max = 6, message = "The password must contain at least 6 and a maximum of 6 digits")
     private String password;
-
 }

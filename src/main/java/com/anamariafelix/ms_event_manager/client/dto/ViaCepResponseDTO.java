@@ -5,10 +5,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class ViaCepResponseDTO {
 
     @JsonAlias("logradouro")
@@ -25,5 +22,4 @@ public class ViaCepResponseDTO {
 
     @JsonAlias("erro")
     private Boolean error;
-
 }
