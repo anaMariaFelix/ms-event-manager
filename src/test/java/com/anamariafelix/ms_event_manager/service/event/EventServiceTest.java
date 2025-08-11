@@ -134,8 +134,7 @@ public class EventServiceTest {
         verify(eventRepository, times(1)).save(any(Event.class));
     }
 
-
-    @Test //findById com id valido
+    @Test //findById
     void fidById_shouldReturnEvent_whenExistsAndNotDeleted() {
         String id = "123";
         Event event = new Event();
@@ -151,7 +150,7 @@ public class EventServiceTest {
         verify(eventRepository).findByIdAndDeletedFalse(id);
     }
 
-    @Test //findById com id invalido
+    @Test
     void fidById_shouldThrowException_whenEventNotFound() {
         String id = "456";
         when(eventRepository.findByIdAndDeletedFalse(id)).thenReturn(Optional.empty());
