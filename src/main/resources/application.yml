@@ -11,7 +11,7 @@ server:
 
 ms:
   ticket:
-    url: http://localhost:8081/api/v1/ticket
+    url:  ${MS_TICKET_URL:http://localhost:8081/api/v1/ticket}
 
 feign:
   client:
