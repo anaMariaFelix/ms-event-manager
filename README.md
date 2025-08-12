@@ -99,8 +99,8 @@ cd ms-event-manager
 mvn spring-boot:run
 
 ```
-### 🌐 Swagger Documentation
-The full API documentation can be accessed at:The full API documentation can be accessed at:
+### 📜 Swagger Documentation
+The full API documentation can be accessed at:
 
 -[http://localhost:8080/swagger-ms-event-manager.html](http://localhost:8080/swagger-ui/index.html)
 
@@ -117,7 +117,7 @@ The full API documentation can be accessed at:The full API documentation can be 
 ### Base URL
 Url that must be passed in requests to endpoints
 
-http:///3.150.5.82:8080
+http://3.150.5.82:8080
   
 ### Endpoint Examples
 | Méthod | Route                         | Description           |
@@ -127,11 +127,11 @@ http:///3.150.5.82:8080
 | GET    |`/api/v1/events/get-all-events`| List all events       |
 
 ### Example of a request via Postman:
-GET http:///3.150.5.82:8080/api/v1/events/get-all-events
+GET http://3.150.5.82:8080/api/v1/events/get-all-events
 
 ## 📜 Swagger 
-The full API documentation can be accessed at:The full API documentation can be accessed at:
+The full API documentation can be accessed at:
 
--[http://3.150.5.82:8080/swagger-ms-event-manager.html](http:///3.150.5.82:8080/swagger-ui/index.html)
+-[http://3.150.5.82:8080/swagger-ms-event-manager.html](http://3.150.5.82:8080/swagger-ui/index.html)
 
 -[http://3.150.5.82:8080/docs-ms-event-manager](http://3.150.5.82:8080/docs-ms-event-manager)
